@@ -1,0 +1,722 @@
+<tw-storydata name="The Gold Rush T1" startnode="15" creator="Twine" creator-version="2.0.8" ifid="CA72E281-8915-4FA5-BDDD-1837F39C6AD3" format="Harlowe" options=""><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">#grey{
+	color:grey;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</style><script role="script" id="twine-user-script" type="text/twine-javascript">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script><tw-passagedata pid="1" name="Intro" tags="" position="15,239">*&lt;div id=&quot;title&quot;&gt;The Gold Rush&lt;/div&gt;*
+
+The town of Boulder River appeared faster than expected. It&#x27;s wooden sign, once a small speck in the distance now looms overhead. There is the feeling of excitement at the prospect of panning for gold in this new frontier, this gold rush town, this is the wild west. One of the towns-folk walks by with a large satchel held on his back. Two women under the arm of a drunk man wearing a brown tweed suit walk by smelling of booze, smiling and laughing together.
+
+An alcohol flask was a lone companion and reminder of why this journey began. It is engraved with the script “To my dearest Bill, please take care of this as you did me”.
+
+
+
+
+[[Continue-&gt;Town]]
+
+&lt;style&gt;
+   #title {
+      font-size: 40px;
+      text-align: center;
+   };
+   
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="2" name="Main" tags="" position="630,568">(display: &quot;Profile&quot;)
+&lt;h2&gt;The Main Road&lt;/h2&gt;
+
+{
+ &lt;!-- When the player first enters the Main Road, This text will appear --&gt;
+(if: (count:(history:),&quot;Main&quot;) is 0)[(set:$main=
+&quot;As Bill exits the tavern he looks to the horizon, it&#x27;s high noon. There is a road up the center of Boulder River. Three signs to locations of interest catch his eye: ***The Tavern, The Bank, and The River***. \n\n\n\n\n\n&quot;)]
+
+ &lt;!-- This message will play any time before 12:00PM. This is morning text.  --&gt;
+(elseif: $time &lt; 780)[(set:$main=&quot;Bill looks to the sky and sees the sun still over the horizon as he comes out of the ***&quot; + ((history:)&#x27;s last) + &quot;*** Onto the Main Road.\n\n\n\n\n\n\n&quot;)]
+
+ &lt;!-- This is noon and afternoon text message --&gt;
+(elseif: $time &gt; 779 and $time &lt; 1080)[(set:$main=&quot;Bill could feel the sun shining bright overhead as he came out of the ***&quot; + ((history:)&#x27;s last) + &quot;***. It was beating down on him from but he knew he could manage.\n\n\n\n\n\n\n&quot;)]
+
+ &lt;!-- This message will activated from Noon to Evening --&gt;
+(elseif: $time &gt; 1079 and $time &lt; 1440)[(set:$main=&quot;He could see the **sunset** as he came out of the ***&quot; + ((history:)&#x27;s last) + &quot;***. Lamps were lit everywhere.\n\n\n\n\n\n\n&quot;)]
+}
+$main
+
+
+[[Bank]]
+[[Tavern]]
+(if:(count:(history:), &quot;River&quot;) is 0)[(link:&quot;River&quot;)[(goto:&quot;hermit meet&quot;)]](else:)[(link:&quot;River&quot;)[(goto:&quot;River&quot;)]] (text-color:grey)[(*Pan for Gold*)]</tw-passagedata><tw-passagedata pid="3" name="General Store" tags="" position="978,315">&lt;!-- don&#x27;t need (display: &quot;Profile&quot;) --&gt;
+{
+&lt;!-- This code here has no purpose now --&gt;
+(if: (count: (history:), &quot;General Store&quot;) is 0)[(set:$text_gstore = 
+&quot;General store text insert here.\n\n\n\n\n\n\n\n&quot;)]
+
+(elseif: (history:)&#x27;s last is &quot;Main&quot;)[(set:$text_gstore = 
+(either: &quot;Welome back! Will you take the usual?&quot;,&quot;Well if it isn&#x27;t my favorite customer!&quot;,&quot;I see you everywhere nowerdays. How&#x27;ve you been?&quot;)+&quot;\n\n\n\n\n\n\n\n&quot;)]
+
+}
+Bill enters the General Store and counts the money in his pocket. He probably only has enough for a few items. He will have to make the decision now about how he will travel on. Should he seek to protect with the gun or be a more productive member of the group with the pickaxe and shovel. 
+
+{
+(if:$gold&gt;=30)[(link:&quot;Gun and Bullets&quot;)[(set:$gold=$gold-30) (if:true)[(set:$gun_bull = 1)](goto:&quot;alert_refresher&quot;)] &lt;d id=&quot;red&quot;&gt;-30 gold&lt;/d&gt;]
+(else:)[&lt;d id=&quot;grey&quot;&gt;**Gun and Bullets** &lt;d id=&quot;red&quot;&gt;-30 gold&lt;/d&gt; *Not enough Gold*]
+}
+{
+(if:$gold&gt;=30)[(link:&quot;Shovel and Pickaxe&quot;)[(set:$gold=$gold-30) (if:true)[(set:$shov_pick = 1)](goto:&quot;alert_refresher&quot;)] &lt;d id=&quot;red&quot;&gt;-30 gold&lt;/d&gt;]
+(else:)[&lt;d id=&quot;grey&quot;&gt;**Shovel and Pickaxe** &lt;d id=&quot;red&quot;&gt;-30 gold&lt;/d&gt;  *Not Enough Gold*]
+}
+
+{
+(if:$gold &lt; 30)[ [[Leave to begin your journey-&gt;Going to journey]] ]
+(else:)[ &lt;d id=&quot;grey&quot;&gt;Leave to begin your journey - choose an item&lt;/d&gt; ]
+}
+
+&lt;!-- Commented out the code to keep it here for the time being
+{
+(if:$gun is 1)[&lt;d id=&quot;grey&quot;&gt;**Gun**&lt;/d&gt; *already bought.*] (elseif: $gun is 0)[|gun&gt;[Gun] &lt;d id=&quot;red&quot;&gt;-25 gold&lt;/d&gt;(click: ?gun)[(if: $gold &gt;= 25)[(replace:?gun)[&lt;d id=&quot;grey&quot;&gt;**Gun**&lt;/d&gt; *You Bought a Gun.*] (if:true)[(set:$gold=$gold-25)](set: $gun = 1)](else:)[(replace: ?gun)[&lt;d id=&quot;grey&quot;&gt;**Gun**&lt;/d&gt;](set:alert(&quot;Not Enough Gold&quot;))(goto:&quot;alert_refresher&quot;)]]]
+}
+--&gt;
+
+&lt;style&gt;
+   #red {
+      color:red;
+   }
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="4" name="Bank" tags="" position="497,569">(display: &quot;Profile&quot;)
+{
+
+(if: (count: (history:), &quot;Bank&quot;) is 0)[(set:$text_bank = &quot;Welcome to Wells Fargo! This your first time here? Well we&#x27;ll be happy to take your gold and spend it on... I mean keep your money safe. Don&#x27;t worry, we&#x27;re one of the securest banks Around these parts of town. Before you begin, I want to let you know, we&#x27;ll be keeping a minimal amount of money in the bank, in order to keep your account&quot;)]
+
+(elseif: $mingold &gt;= 1 and $mingold &lt; 10)[(set:$text_bank = &quot;&lt;i&gt;I&#x27;m sorry! Even though you have money in the bank, we need to keep this amount of gold in order to keep your acccount ativated for the time being. sorry for the inconvience.&lt;/i&gt;\n\n&quot;)]
+
+(elseif: $mingold &gt;= 10)[(set:$text_bank = &quot;Seriously dude, stop pressing the withdrawal button and continue with the game. Doing this will achieve nothing.\n\n\n&quot;)]
+
+(elseif: (history:)&#x27;s last is &quot;Main&quot;)[(set:$text_bank = (either: &quot;Welome back! Shall I make a deposit?&quot;,&quot;Well if it isn&#x27;t my favorite customer! Welcome!&quot;,&quot;I see you everywhere nowerdays. How&#x27;ve you been?&quot;)+&quot;\n\n\n&quot;)]
+
+}
+$text_bank
+
+
+(display:&quot;bank_account&quot;)
+
+
+
+{
+(if: $gold is 0)[&lt;d id=&quot;grey&quot;&gt;**Deposit**&lt;/d&gt; (text-color:red)[No gold to Deposit]]
+
+(else:)[(link:&quot;Deposit&quot;)[(move:($gold + $bank) into $bank) (set: $gold = $gold - $gold) (goto:&quot;alert_refresher&quot;)]]
+}
+{
+(if: $bank is 0)[&lt;d id=&quot;grey&quot;&gt;**Withdrawal**&lt;/d&gt; (text-color:red)[No gold in bank]]
+
+(elseif: $bank &lt;= 25)[(link:&quot;Withdrawal&quot;)[(set:$mingold = $mingold + 1)(goto:&quot;alert_refresher&quot;)]]
+
+(elseif: $gold is 50)[&lt;d id=&quot;grey&quot;&gt;**Withdrawal**&lt;/d&gt; (text-color:red)[Max held Gold]]
+
+(elseif:$bank &gt; 25)[(link:&quot;Withdrawal&quot;)[(if:(($bank - 25) + $gold) &gt; 50)[(set: $bank = $bank - (50-$gold))(move: 50 into $gold)(goto:&quot;alert_refresher&quot;)](else:)[(move:(($bank - 25) + $gold) into $gold) (set: $bank = $bank - ($bank - 25))(goto:&quot;alert_refresher&quot;)]]]
+
+}
+[[Leave-&gt;Main]]</tw-passagedata><tw-passagedata pid="5" name="Tavern" tags="" position="756,570">(display:&quot;Profile&quot;)
+{
+
+(if: (history:)&#x27;s last is &quot;alert_refresher&quot;)[]
+
+(elseif: (count: (history:), &quot;Tavern&quot;) is 0)[(set:$text_tavern = 
+&quot;As you enter the Tavern, the piano player is playing music again. You look around and the faces all ignore you. The other people appear to have become accustom to this life, working then spending their money here. Bill had never panned for gold before but just the prospect of it was stimiulating. A beer is in order.&quot;)]
+
+(elseif: (history:)&#x27;s last is &quot;Main&quot;)[(set:$text_tavern = 
+(either: &quot;Welome back! Will you take the usual?&quot;,&quot;Well if it isn&#x27;t my favorite customer!&quot;,&quot;I see you everywhere nowerdays. How&#x27;ve you been?&quot;) + &quot;\n\n\n\n&quot;)]
+
+(else:)[(set:$text_tavern = &quot;You took a drink. The first swig of beer did nothing to phase you. It was more of a refreshing beverage at best.\n\n\n\n&quot;)]
+
+}
+$text_tavern
+
+{
+(link:&quot;Take a Drink&quot;)[(if:$stm &lt; 5 and $gold &gt; 0)[(set: $gold to $gold - 1)(if:true)[(set: $stm = $stm+1)](if:true)[(set: $time = $time+30)](goto:&quot;Tavern&quot;)](elseif:$gold &lt;= 0)[&lt;d id=&quot;grey&quot;&gt;**Take a Drink**&lt;/d&gt;(set:alert(&quot;Not Enough Gold&quot;))(goto:&quot;alert_refresher&quot;)](else:)[&lt;d id=&quot;grey&quot;&gt;**Take a Drink**&lt;/d&gt;(set:alert(&quot;Stamina at maximum&quot;))(goto:&quot;alert_refresher&quot;)]] &lt;d id=&quot;hp&quot;&gt;-1 gold&lt;/d&gt; &lt;d id=&quot;stm&quot;&gt;+1 stamina&lt;/d&gt; &lt;d id=&quot;hp&quot;&gt;+Half Hour (30 min)&lt;/d&gt;
+}
+[[Leave-&gt;Main]]
+{
+(if:$brob is 1)[(link: &quot;Unsavory Types&quot;)[(goto:&quot;Voyage&quot;)]]
+}
+
+&lt;style&gt;
+   
+   #hp {
+      color: red;
+   }
+   #stm {
+      color: green;
+   }
+   #grey {
+      color: grey;
+   }
+
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="6" name="Profile" tags="" position="310,56">Health: $hp/10 Stamina: $stm/5 Time: {
+(if:$time&gt;1439)[(set:$time=$time%1440)](if:$time&gt;779)[(print:(round:(($time/60)-($time%60)/60)-12))](else:)[(print:(round:(($time/60)-($time%60)/60)))]:(if:$time%60&gt;9)[(print:$time%60)](else:)[0(print:$time%60)](if:($time&gt;719))[(print:&quot; PM&quot;)](else:)[(print:&quot; AM&quot;)]
+
+&lt;!-- This will trigger the event when the time is 10:00pm for the player to go to sleep, **REMINDER**: Time is calculated in minutes! --&gt;
+(if: ($time &gt;=1320) and ($brobcheck is 0))[(goto:&quot;bank_robbery&quot;)]
+}&lt;p id=&quot;right_inventory&quot;&gt; Inventory 
+Gold: $gold/50 &lt;/p&gt;
+&lt;style&gt;
+   #right_inventory {
+      margin: 0 auto auto auto;
+      width: 200px;
+      height: 900px;
+      float: right;
+      text-align:center;
+      border: 1px solid black;
+      background: #E0E0E0;
+   }
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="7" name="bank_account" tags="" position="450,60">Stored in bank: $bank</tw-passagedata><tw-passagedata pid="8" name="River" tags="" position="629,842">(display: &quot;Profile&quot;)
+&lt;h2&gt;The River&lt;/h2&gt;
+{
+(if: (history:)&#x27;s last is &quot;alert_refresher&quot;)[]
+
+(elseif: (count:(history:),&quot;River&quot;) is 0)[(set: $textriver = &quot;At the river, Bill could see people bustling up and down it&#x27;s banks. He remembered the article from the magazine he had read at work before he had left the big city. It detailed how to pan for gold and gave him the map for his travels. He had commited it all to memory. He was lucky to find a old dirty pan lying around on the trail to the river from town. It would do for now.\n\n\n\n\n\n\n&quot;)]
+(elseif: (history:)&#x27;s last is &quot;Main&quot;)[(set: $textriver = &quot;Upon returning to the river, he was glad his hard work was paying off. He was ready for more.\n\n\n\n\n\n\n\n\n\n&quot;)]
+(else:)[(set: $textriver = (either: &quot;After being in the hot sun for a while, &quot;, &quot;Since this is his first day panning for gold &quot;, &quot;The work is not easy but he is getting the hang of it. &quot;) + &quot;Bill is pleased with his progress but is losing stamina\n\n\n\n\n\n\n&quot;)]
+}
+$textriver
+{
+(link:&quot;Pan for Gold&quot;)[(if:$stm&gt;0 and ($gold+10)&lt;=50)[(set:$gold= $gold+10)(if:true)[(set: $stm=$stm-1)](if:true)[(set: $time=$time+60)](goto:&quot;River&quot;)](elseif:$stm is 0)[&lt;d id=&quot;grey&quot;&gt;**Pan for Gold**&lt;/d&gt;(set:alert(&quot;Not enough Stamina, get a drink to replenish&quot;))(goto:&quot;alert_refresher&quot;)](else:)[&lt;d id=&quot;grey&quot;&gt;**Pan for Gold**&lt;/d&gt;(set:alert(&quot;Not enough Space, Deposit money in the bank&quot;))(goto:&quot;alert_refresher&quot;)]] &lt;d id=&quot;green&quot;&gt;+10 gold&lt;/d&gt; &lt;d id=&quot;stm&quot;&gt;-1 stamina +1 hour&lt;/d&gt; 
+}
+[[Leave-&gt;Main]]
+&lt;style&gt;
+   #green {
+      color: green;
+   }
+
+   #stm {
+      color: red;
+   }
+
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="9" name="Town" tags="" position="163,238">A voice in Bill&#x27;s mind says silently “Welcome to Boulder River, where your fortune is made and the past becomes lost.&quot; He lifts the flask to his mouth only to find it empty.
+
+It has been some days on the road to get here and with the flask empty Bill feels very parched. Luckily, there is a Tavern not far away. &quot;I could go for a drink right about now...&quot; Bill said to himself.
+
+
+
+
+
+
+
+
+
+
+[[Walk to the Tavern-&gt;first_tavern]]</tw-passagedata><tw-passagedata pid="10" name="first_tavern" tags="" position="307,238">Bill enters the Tavern with hopes of a drink. A piano player clinks away at a small old piano that sounds a bit out of tune. The patrons have dirt grounded into their hands and torn clothing, this is not promising for the hopes of riches to come but it is easily shrugged off as the sight of the fully stocked bar presents itself. The Bartender is a older lady with a peg-leg she looks like she once was attractive but now stands there grimacing. “What&#x27;ll it be?&quot;
+
+
+
+
+
+
+
+
+
+
+[[Talk to Bartender-&gt;talk_bartender]]</tw-passagedata><tw-passagedata pid="11" name="talk_bartender" tags="" position="452,239">
+“Howdy, my name is Bill, I have come a long way to pan for gold here. Boulder River is exactly what I expected”. This was a lie of course but no sense in insulting the place.
+
+She grins and says “Good for you. I see your type all the time, your more than likely not going to last two sundowns, how light your packed”
+
+
+
+
+
+
+
+
+
+[[&quot;Well, a drink please. It always helped me with problems before&quot;-&gt;enough_coin]]
+[[&quot;Yeah, well you don&#x27;t know me.&quot;-&gt;buy_drink]]</tw-passagedata><tw-passagedata pid="12" name="buy_drink" tags="" position="627,176">The Bartender says &quot;So where are you from friend?&quot;
+
+Bill thinks to himself that she must be used to the rougher types of people &quot;I&#x27;m from New York. A big city to the east. I was a train conductor and heard many stories about the West and the Gold Rush. My wife left me so I decided to come to these parts and find a new way of life&quot;
+
+She seems intruiged by the story &quot;Is that so, well you have come to the right place. Boulder River hasn&#x27;t been around long, but the people here make a decent living. If you work hard, it will pay off&quot;
+
+Bill likes the sound of that, the city was a good place for a family but with that chance gone, a change was in order.
+
+
+[[How about that drink?-&gt;enough_coin]]</tw-passagedata><tw-passagedata pid="13" name="enough_coin" tags="" position="628,310">{
+(display: &quot;Profile&quot;)
+}
+Bill searches his pockets and finds his last coin. He hands it to the bartender.
+
+She looks at it, turning it over in her hand &quot;We mostly get gold nuggets here but this will do.&quot;
+
+She slaps the beer on the table and Bill quickly sips it without waiting. The feeling is invigorating and Bill has now regained all of his stamina.
+
+As he sits enjoying his drink he look&#x27;s around the room. The piano player has stopped playing, there is a card game going on at one of the tables and everything reminds him of a watered down, delapetated version of the taverns in the city he left.
+
+There is a man with a beard sitting at the bar stool to the left. Bill realizes he is staring as the man turns and meets the gaze. Bill turns back to his beer, after such a long voyage he feels strangely at peace in his own head.
+
+[[The man to the left taps Bill on the shoulder-&gt;talk_stranger2]]</tw-passagedata><tw-passagedata pid="14" name="talk_stranger2" tags="" position="629,443">(display: &quot;Profile&quot;)
+
+&quot;Howdy, Partner!&quot; The man to Bills left says in a friendly voice. 
+Bill greets the man then returns to his beer thinking nothing of it. After a few moments the man continues &quot;My name is Jonas, you must be new here. Panning for gold I take it?&quot;
+
+Bill nods and replies &quot;I suppose introductions are in order, I&#x27;m Bill.&quot;
+Jonas slaps him on the back &quot;Hey, I like that name. I&#x27;ve known a few Bill&#x27;s in my day&quot;
+
+Bill smiles and go back to drinking your beer.
+
+Jonas says &quot;You know what? you keep to yourself, I like that. I&#x27;ll let you in on a little secret. Me and some other guys are getting together tomorrow morning near the main road to travel to a secret spot on the mountain. It&#x27;s where the gold leaks into the river. It may be dangerous so we need one more man. If your interested meet us in the morning.&quot;
+
+Bill smiles at him &quot;Ok Jonas, good meeting you. For now I will take my chances panning for gold in the river.&quot;
+
+After Jonas chugs the last of his beer he says &quot;Well Bill, if you change your mind you know where we will be&quot; and walks out the tavern doors.
+
+What a interesting fellow Bill thinks. The beer is soon finished and Bill walks outside.
+
+[[To the Main Road-&gt;Main]]</tw-passagedata><tw-passagedata pid="15" name="init" tags="" position="162,52">{
+&lt;!-- Initializing all the variables before beginning your adventure --&gt;
+
+(set: $brob = 0)
+(set: $brobcheck = 0)
+(set: $talkedman = 0)
+
+(set: $bank = 0)
+(set: $hp = 10)
+(set: $gold = 0)
+(set: $stm = 5)
+(set: $time = 720)
+
+(set: $main = null)
+(set: $text_bank = null)
+(set: $text_gstore = null)
+(set: $text_tavern = null)
+
+(goto: &quot;Intro&quot;)
+}</tw-passagedata><tw-passagedata pid="16" name="alert_refresher" tags="" position="18,52">&lt;!-- This is passage for alert message to link to in order to keep the previous passage&#x27;s current text dialogue--&gt; 
+
+(goto: (history:)&#x27;s last)</tw-passagedata><tw-passagedata pid="17" name="bank_robbery" tags="" position="979,43">{
+
+&lt;!-- This event will trigger when the time reachs pass 10:00pm --&gt;
+
+}
+The day sun is down the shops are closing and there is no more light to pan for gold. Bill finds an Inn to sleep near the Tavern. As Bill eats a can of beans from the can with a fork, he hears a commotion outside his window. There must be a large group of people talking outside. 
+
+Bill leaves the can of beans for later and proceeds down the stairs and outside. It is dark and there is a man in a suit holding a lantern talking to a group of people. Bill enters the crowd and asks someone what is going on.
+
+&quot;You didn&#x27;t hear, someone robbed the bank after it closed. We all had our gold nuggets stored there&quot;
+
+Bills heart dropped. He had his earnings stored there too. After milling around for a while Bill heads back to his room to try to decide what to do and get some sleep if he can.
+
+(set: $brobcheck to 1)
+[[Continue-&gt;sleep_inn]]</tw-passagedata><tw-passagedata pid="18" name="sleep_inn" tags="" position="1108,103">Bill lay down in his bed staring at the ceiling. After such a long journey and hard work he had lost it all. Then he remembered Jonas from the Tavern. Perhaps there was hope after all. It would be dangerous, Native Americans in these parts were not friendly. The way Jonas had described it Bill might become even richer than if he had stuck around to Pan for gold. It was decided then, he would join them in the morning...it was worth the risk.
+
+Bill felt the stress leave him and his eyes begin to feel heavy. He drifted off to sleep quicker than he would have thought.
+
+
+[[Bill is dreaming in no time-&gt;Dream]]</tw-passagedata><tw-passagedata pid="19" name="meet" tags="" position="1105,243">In the morning, Bill got dressed and got his things together quickly. He did not want Jonas and his party to leave without him.
+
+At the Main Road, he saw 3 men talking near their horses. One of them was Jonas. Bill approached them &quot;Good Morning Fellas, I decided to come along.&quot;
+
+The other two acknowledged him and began talking to each other. Jonas shook Bill&#x27;s hand saying &quot;You made the right choice son. Looks like you are packed pretty light, you will want to go to the General Store and gather a few things.&quot;
+
+Bill responds &quot;Not sure if I can, most of my money was in the Bank which was robbed last night&quot;
+
+Jonas slaps Bill on the back &quot;No problem, we can help you out. Heres a little gold if you need it, but pick wisely&quot;
+
+(set: $gold to 31)
+
+[[General Store]]</tw-passagedata><tw-passagedata pid="20" name="Going to journey" tags="" position="1103,378">The party were already mounted on the horses and Bill saw they had an extra horse for him. He approached and mounted the empty horse &quot;Ok, I&#x27;m ready.&quot;
+
+Jonas introduced the other 2 men. Ben was a short, fat bearded man who was chewing on a cigerrette intently. The other man was only identified as Oaky, he was an older fellow about the same size as Jonas but skinny as a twig with a face that was weathered and wrinkled. Both men, nodded and touched the tip of their hats towards Bill upon introduction. Bill greeted them with a nod back.
+
+Jonas chimed &quot;I&#x27;m the leader of the group, you answer to me. Don&#x27;t worry, they may not look like much but they can handle themselves fine&quot; He continued &quot;We don&#x27;t have far to travel on horseback so let&#x27;s get a move on.&quot;
+
+[[Leave Town-&gt;On the Road]]</tw-passagedata><tw-passagedata pid="21" name="On the Road" tags="" position="978,455">The mountain top was in clear view and was getting bigger quicker than expected. Jonas had told them that the secret grounds they would be excavated were in dangerous territory. Native Americans were still living in the wild out there.
+
+After a few miles at a brisk pace a fork in the trail appeared. One was appeared to vear off into a forest and Jonas pointed saying &quot;This path will be the safest, we will have cover the whole journey, however it is also slower&quot;.
+
+The other went down through a ravine and Jonas told them &quot;The ravine is a bad place to be if attacked but it will be the fastest route.&quot; He allows the party to choose.
+
+[[The party chooses the ravine -&gt;The Ravine]]
+[[The party chooses the forest -&gt;The Forest]]</tw-passagedata><tw-passagedata pid="22" name="The Ravine" tags="" position="908,596">Through the ravine the party is covered on both sides by cliffs. A few miles ahead the cliffs join together where there must be a trail up higher into the mountains. Suddenly, a loud shrill sound marks the air. It is familiar to Bill, he had heard something similar from the young Native American boys who played at the river where his father had taken him fishing as a youth. The Native Americans in the East where peaceful for the most part but this war cry made Bills skin crawl. Bill looked to the top of the cliff closest to him, one horse appeared on the top of it with a Native American holding a bow and arrow on top of it.
+
+(if: ($gun_bull is 1))[ [[Draw The Gun-&gt;Fight]] ]
+(else:)[ &lt;i&gt;Draw The Gun - Sorry, no gun or bullets&lt;/i&gt; ]
+(if: ($shov_pick is 1))[ [[Try to Communicate-&gt;Communicate]] ]
+(else:)[&lt;i&gt;Try to Communicate - Sorry, in the heat of the battle Bills mind draws a blank of anything that could possibly help&lt;/i&gt; ]
+
+&lt;style&gt;
+i {
+color: grey;
+}
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="23" name="The Forest" tags="" position="1058,591">The forest is a easy trail. It has not been walked much but Jonas says he knows the way. About 20 minutes in the party came upon a |d1&gt;[mysterious decoration] crossing the path. Below it is a [tapestry]&lt;d2| made of leather buffalo hide covering the ground. 
+Not long after that the party reaches a Empty Village. It appears to have been deserted for years. Jonas proclaims this is a good place to take a rest and asks Bill what he wants to do.
+
+{
+(click: ?d1)[&lt;b&gt;Mysterious Decoration:&lt;/b&gt;&lt;i&gt; It is the headband of a Native American tribesman, it must be a memorial of some kind&lt;/i&gt;]
+(click: ?d2)[&lt;br/&gt;&lt;b&gt;Tapestry:&lt;/b&gt;&lt;i&gt; It is a Native American tribesman garb, it looks as though it is very old&lt;/i&gt;]
+}
+
+[[Take a rest -&gt;The Village]]</tw-passagedata><tw-passagedata pid="24" name="The Village" tags="" position="1145,756">The Village was built in a clearing and the tents had been long gone. All that was left was a fire pit in the center along with broken pots and other miscellaneous items.
+
+(if: ((count: (history:), &quot;Talk to Ben&quot;) is 0) and (count: (history:), &quot;Talk to Oaky&quot;) is 0)[ This would be a good time to get acquainted with the rest of the posse. ]
+(if: (count: (history:), &quot;Talk to Ben&quot;) is 0)[Ben is sitting by fire pit smoking yet another cigarrete. [[Bill approaches him and takes a seat.-&gt;Talk to Ben]]. ]
+(if: (count: (history:), &quot;Talk to Oaky&quot;) is 0)[Oaky is inspecting the broken pots possibly for some valuable loot left behind. [[Bill starts to walk next to him as he continues his task.-&gt;Talk to Oaky]] ]
+
+(if: ((count: (history:), &quot;Talk to Ben&quot;) &gt; 0) and ((count: (history:), &quot;Talk to Oaky&quot;) &gt; 0) and (count: (history:), &quot;Talk to Old Man&quot;) is 0 and ($shov_pick is 1))[ Bill see&#x27;s an old Native American man walking away into the brush. [[Bill follows him into the forest.-&gt;Talk to Old Man]] ]
+
+{
+(if: (($talkedman is 0) and ($shov_pick is 1)))[&lt;i id=&quot;grey&quot;&gt;Continue on with your journey&lt;/i&gt;]
+(else:)[[[Continue to the Journey-&gt;The Gold Grounds]]]
+}</tw-passagedata><tw-passagedata pid="25" name="The Gold Grounds" tags="" position="973,938">The party has reached a point in the mountain where there is a large cave that goes into the mountainside. Out of it pours the river that leads to town. It is just as Jonas said. 
+
+(if: $shov_pick is 1)[ Jonas puts the other 3 men, including Bill on work duty. Picking at the rock inside the cave to find the chunks of gold embedded in it while he stands gaurd at the mouth of the cave. It&#x27;s harder work than panning but after a few hours Bill see&#x27;s a few fragments of rock break off to reveal some gold beneath. Ben and Oaky dance around in jubilation. Ben yells out to the Jonas &quot;We found something, come quick!&quot;. 
+
+A few moments pass and a yell comes back from the mouth of the cave. Then Jonas appears limping, he has an arrow dug into his thigh. When he reaches them he says weakly &quot;The Indians, their outside. We need to go to the front of the cave, take cover and fight them off. Bill help me to the front of the cave behind those rocks so I can get a clear shot.&quot;
+[[Bill helps Jonas to the front of the cave-&gt;End Fight Explorer]] ]
+(else:)[ Jonas tells the other 2 men to go into the cave and start digging. He tells Bill to stand gaurd with him. A few hours pass by with the sound of rock hitting metal echoing from the cave steadily. Not long before the sun hits the horizon and light starts to fade there is a yell from inside the cave &quot;Come quick, we found something.&quot;
+
+Jonas and Bill enter the cave to see a piece of gold gleaming inside the face of a cracked peice of rock. The whole party whoops and hollers. Jonas exclaims &quot;Good work Fellas, lets call it a day and get some rest. We&#x27;ll get a good start at it in the morning.&quot;
+
+As the party leaves the cave an arrow hits Oaky directly in the chest. He crumples to the ground. Jonas exclaims &quot;Quick, take cover behind those rocks and fight the Indians off!&quot;.
+[[Bill and the rest of the party draw their guns and take cover-&gt;End Fight Gunslinger]] ]</tw-passagedata><tw-passagedata pid="26" name="Talk to Ben" tags="" position="1336,760">Ben offers Bill a smoke, declining Bill replys &quot;Did you have trouble panning for gold like I did?&quot;
+
+Ben laughs &quot;Never tried, Jonas and I have been traveling together for a while. We always had our eyes set on the Mountain but were waiting for the right time&quot;
+
+Bill wonders what the right time means but figures it would be rude to ask, instead he notices the two big sacks attached to back of Jonas horse, they are much larger than the others &quot;So what is in those two bags, is that for our haul? They already look full.&quot;
+
+Ben just nods and turns and walks towards Jonas. Bill watches the two of them talking and peering in his direction.
+
+[[Bill turns around and survey the scene-&gt;The Village]] </tw-passagedata><tw-passagedata pid="27" name="Talk to Oaky" tags="" position="1298,911">Oaky notices Bill approaching and becomes even more attentive to what he is doing.  Bill inquires &quot;So how did you get brought on to this posse?&quot;
+
+He doesn&#x27;t look up and in a raspy voice replies &quot;I owed them a favor or two, they needed an extra man&quot;
+
+This sounds reasonable &quot;I guess I should count myself lucky to get invited after the bank robbery, I lost my haul&quot;
+
+He finally looks at Bill dead in the face and says &quot;You never know, we may have more in common that you think&quot;.
+
+He walks away and continues poking the various artifacts with a stick.
+
+[[Bill returns to what he is doing-&gt;The Village]] </tw-passagedata><tw-passagedata pid="28" name="Talk to Old Man" tags="" position="1303,615">He turns around and his face is expressionless. Bill knows he does not speak english and can&#x27;t remember how to say anything in their sign language but what he saw in the dream the night before. 
+Bill signs &quot;Life holds more promise than gold you can&#x27;t carry&quot;.
+The old man says something back in sign that Bill can&#x27;t understand, then turns around and disappears into the forest. Bill thinks if he should tell the rest of the party about the encounter but decides against it.
+
+(set: $talkedman to 1)
+
+[[Bill returns to the village-&gt;The Village]]</tw-passagedata><tw-passagedata pid="29" name="Fight" tags="" position="973,764">Bill had been hunting before but he had never fired a gun at someone before. As soon as he drew the gun, so does the rest of the party. All of them pointed towards the lone Native American on the ridge. He is too far to get a clean shot so there are a few moments of complete silence. Then the Native American pulls on the reigns of the horse so that it&#x27;s front legs rise in the air. He gives of another loud cry in the air and turns his horse disapearing behind the ridge.
+
+All four of the man below exchange glances with guns still drawn. After a few minutes it becomes apparent that the Native American has retreated. Jonas puts his gun away first and says &quot;Good work Fellas, we must have scared them away. If they come again we will be ready.&quot;
+
+Bill is pleased, he puts his gun away and grips the reigns of his horse.
+
+[[Continue on through the Ravine-&gt;The Gold Grounds]]</tw-passagedata><tw-passagedata pid="30" name="Communicate" tags="" position="824,763">In the heat of the moment Bill mind goes directly to the dream he had the night before.
+
+He repeats it as best he can &quot;Life holds more promise than gold you can&#x27;t carry&quot;.
+
+Bill is closest to the lone Native American on the ridge and he can see the design of the headdress he is wearing. It is large with purple, red and yellow flowers decorating it. The Native American makes a hand signal, probably to others that are out of view and then disappears into the mountain. Bill sigh&#x27;s with relief. Jonas slaps Bill on the back yet again and exclaims &quot;I don&#x27;t know what you did, but I guess we made the right choice bringing you along&quot;.
+
+Bill looks at their faces and they look more resolute than ever.
+
+(set: $talkedman to 2)
+[[Continue on through the Ravine-&gt;The Gold Grounds]]</tw-passagedata><tw-passagedata pid="31" name="Dream" tags="" position="980,180">He dreamt of his father and a fishing trip they took regularly back east where he grew up. Things were calmer there, the Native Americans and the Pioneers lived in relative peace. He even befriended the Native American boys who also fished at the same place in the bay. They taught him the common language shared by all tribes. It was a type of sign language, and over and over again he dreamt of the same sentence in sign &quot;Be weary, your life holds more promise than gold you can&#x27;t carry&quot;. Earily, the message brought him a feeling of both peace and apprehension.
+
+[[Morning soon came, lighting the windows-&gt;meet]]</tw-passagedata><tw-passagedata pid="32" name="End Fight Explorer" tags="" position="831,1088">Bill takes cover next to a wounded Jonas and without a gun to fight he just hunches over to make sure he is not exposed. Jonas and the rest peer over the rocks and fire their guns as arrows whizz by narrowly missing their hiding spots.
+
+In the few moments between the battle there is conversation between the party. 
+&quot;We are surrounded&quot;, &quot;I see more than 10 of them, I don&#x27;t know if I have enough bullets&quot;,&quot;Gosh, I can&#x27;t tell if I&#x27;m hitting anything.&quot; and &quot;Take this you son of a guns!&quot;. The only thing Bill can do is listen and hope they can fight them off.
+
+Then Jonas looks at Bill and whispers &quot;Bill, I want you to run to the horses and try to wrangle them over here. If you can&#x27;t get to them all at least bring my horse.&quot;
+
+Bill replys &quot;Why just your horse? Are you thinking of abandoning us?&quot;
+
+Jonas doesn&#x27;t flinch &quot;If you must know there is a bunch of gold in the sacks on my horse. We can&#x27;t loose those no matter what.&quot;
+
+Bill replys &quot;What? gold? From where?&quot;
+
+Jonas says &quot;We robbed the bank in town. We don&#x27;t plan on living this life forever and since I like you I decided to give you a chance.&quot;
+
+At this admission Bill is not complimented, in fact he is insulted. Bill says to Jonas &quot;You mean you have me out here risking my neck because you stole all my money!?&quot;
+
+Jonas doesn&#x27;t look surprised and just says &quot;You play your cards right and we might all get out of here rich men, you don&#x27;t and the Indians will be the least of your worrys&quot; He then points the gun towards Bill, puts his thumb on the hammer but doesn&#x27;t cock it.
+
+Bill just stares at the gun in disbelief. It seems there is a stand off. All of a sudden Jonas&#x27;s gun drops out of his hand and he falls to the ground with a thud. An arrow is sticking out of his back.
+
+Bill looks around and surveys the scene only to see both Ben and Oaky running towards the horses. A few Indians jump from the bushes and they begin to fight. Bill ducks down and considers taking Jonas&#x27;s gun and making a run for it but instead just kneels, closes his eyes and prays for the first time he has in a long time.
+
+[[Bill hears the sound of gunfire and yells, then silence-&gt;Ending Explorer]]</tw-passagedata><tw-passagedata pid="33" name="End Fight Gunslinger" tags="" position="1107,1088">This is the first time Bill has had to fire his gun. It goes off loudly in is ears filling the air with wisps of smoke. Bill can&#x27;t tell if he hit anyone because the Native Americans are shooting their arrows from the bushes covered by trees near their horses.
+
+Bill hears Jonas shouting as he shoots over the rock &quot;Give em hell, Fellas!&quot;, &quot;Don&#x27;t Let up, we will win!&quot; and &quot;This ones for Oaky!&quot;.
+
+Three Native Americans have just flanked them from the side. Ben starts wrestling with one on the ground. Bill takes aim and fires, knocking him off Ben. The two other Native Americans were behind the first and had fired arrows at Jonas. One shot had hit him in the arm and the other in the leg. He dropped on the spot. 
+
+Ben saw this and began running towards the horses, firing his gun from side to side as he went. Bill does the same, he does not want to be left out here alone. Ben reaches one of the horses and unties it, but right as he does an arrow hits the horse and it reals over and falls. Gold scatters on the ground from it&#x27;s bags. Still running for the other horses, firing the gun at anything that moves, Bill suddenly feels a aching pressure in his side. An arrow has struck him dead in the ribs, he is in pain but continues to limp towards the horses. Another arrow hits him in the leg, there is no way he can continue. 
+
+Bill falls and hits the ground with his face towards the horses. His vision is starting to blur and the last thing see&#x27;s is gold spilling from the bags of the fallen horse.
+
+[[Bill&#x27;s vision goes black-&gt;Ending Gunslinger]]</tw-passagedata><tw-passagedata pid="34" name="Ending Explorer" tags="" position="830,1223">Bills eyes remain closed for a unknown period of time. Then he feels a tap on his shoulder. It is (if: $talkedman is 2)[the Native American from the ridge in the ravine, he can tell from the design of his headdress, he is holding an axe.](else:)[the old man from the village.] Bill is not as scared as he would have thought, they both stare at each other for a few moments. The Native American then signs the same thing Bill had done earlier. The sentence has taken on a special significance now in light of the battle.
+
+The Native American then says something to the rest of them in their spoken tongue. They all turn around and mount their horses leaving Bill and the Native American he had seen earlier standing together. The Native American then makes a sweeping motion with his arm towards the horses the party brought, apparently signifying he is free to go.
+
+With a sigh, Bill gets up and slowly walks towards the horses. He walks past Ben and Oaky on the ground motionless. Bill mounts Jonas&#x27;s horse and waves at the lone Native American who is now standing next to the rest watching him leave.
+
+Bill remembers the gold from the bank robbery in the bags on the horse and feels a strange melancholy feeling come over him replacing the fear. The rest of the story was up to him.
+
+[[You have won-&gt;Winning]]</tw-passagedata><tw-passagedata pid="35" name="Ending Gunslinger" tags="" position="1107,1213">*&lt;div id=&quot;title&quot;&gt;The End&lt;/div&gt;*
+Sorry, you have died. Perhaps try again and choose a different item from the General Store before the Journey. It may be worth it.
+
+(link:&quot;Start Over&quot;)[(gotourl:&quot;The_Gold_Rush.html&quot;)]
+
+{
+&lt;!-- Initializing all the variables before beginning your adventure 
+     reinistializing them, just in case and for testing  --&gt;
+
+(set: $brob = 0)
+(set: $brobcheck = 0)
+
+(set: $bank = 0)
+(set: $hp = 10)
+(set: $gold = 0)
+(set: $stm = 5)
+(set: $time = 720)
+
+(set: $main = null)
+(set: $text_bank = null)
+(set: $text_gstore = null)
+(set: $text_tavern = null)
+
+(set: $gun_bull = 0)
+(set: $shov_pick = 0)
+
+}</tw-passagedata><tw-passagedata pid="36" name="Winning" tags="" position="830,1355">*&lt;div id=&quot;title&quot;&gt;The End&lt;/div&gt;*
+You have done well, escaped with your life and the gold. Perhaps play again with another item from the General Store. If you didn&#x27;t pick the forest path or the Ravine before there is a little more to explore. It may be worth it.
+
+(link:&quot;Start Over&quot;)[(gotourl:&quot;The_Gold_Rush.html&quot;)]
+
+{
+&lt;!-- Initializing all the variables before beginning your adventure
+     re-initializing them, just in case and for testing   --&gt;
+
+(set: $brob = 0)
+(set: $brobcheck = 0)
+
+(set: $bank = 0)
+(set: $hp = 10)
+(set: $gold = 0)
+(set: $stm = 5)
+(set: $time = 720)
+
+(set: $main = null)
+(set: $text_bank = null)
+(set: $text_gstore = null)
+(set: $text_tavern = null)
+
+(set: $gun_bull = 0)
+(set: $shov_pick = 0)
+}</tw-passagedata><tw-passagedata pid="37" name="fight_seq" tags="" position="1865,481">&lt;!-- Here is the fight sequence for the cowboy Bill --&gt;
+(display:&quot;profile2&quot;)
+
+
+{
+(link:&quot;Flee&quot;)[(if:(random:0,10) &gt; 3)[(link:&quot;Return&quot;)[(set: $escape = null)(goto:&quot;Mining Town&quot;)] You were able to escape! ](else:)[(set:$hp = $hp - 10)(if:true)[(set: $escape = &quot; You weren&#x27;t able to escape. You took 10 damage.&quot;)](goto:&quot;fight_seq&quot;)]]
+} $escape</tw-passagedata><tw-passagedata pid="38" name="save1" tags="" position="15,433">{
+&lt;!-- First save file, stores all the variables that happened in the game --&gt;
+
+(set: $brob = 0)
+(set: $brobcheck = 0)
+(set: $talkedman = 0)
+
+(set: $bank = 0)
+(set: $hp = 10)
+(set: $gold = 0)
+(set: $stm = 5)
+(set: $time = 720)
+
+(set: $main = null)
+(set: $text_bank = null)
+(set: $text_gstore = null)
+(set: $text_tavern = null)
+
+(goto: &quot;Intro&quot;)
+}</tw-passagedata><tw-passagedata pid="39" name="save2" tags="" position="162,434">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="40" name="save3" tags="" position="315,434">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="41" name="dead" tags="" position="2055,56">You died a horrible death....
+
+
+
+(link:&quot;Restart Game?&quot;)[(goto:&quot;init&quot;)]</tw-passagedata><tw-passagedata pid="42" name="Mining Town" tags="" position="1863,91">(display:&quot;profile2&quot;)
+
+Here is the mining town we will visit during your journey
+
+
+
+
+
+[[Go to Camp-&gt;mining camp]]</tw-passagedata><tw-passagedata pid="43" name="mining camp" tags="" position="1863,226">(display:&quot;profile2&quot;)
+
+Set the number of NPCs to either mine or defend your camp
+
+Crew members: $npc
+Gold per run: $gold_return
+
+
+
+
+
+Number of defenders: $defender &lt;d id=&quot;sign&quot;&gt;{
+(if: $npc &gt; 0)[(link:&quot;+&quot;)[(set: $npc = $npc - 1)(if:true)[(set: $defender = $defender + 1)](goto:&quot;plus&quot;)]](else:)[&lt;d id=&quot;grey&quot;&gt;**+**&lt;/d&gt;]
+} {
+(if: $defender &gt; 0)[(link:&quot;-&quot;)[(set: $npc = $npc + 1)(if:true)[(set: $defender = $defender - 1)](goto:&quot;minus&quot;)]](else:)[&lt;d id=&quot;grey&quot;&gt;**-**&lt;/d&gt;]
+} &lt;/d&gt;
+Number of miners: $miner &lt;d id=&quot;sign&quot;&gt;{
+(if:$npc &gt; 0)[(link:&quot;+&quot;)[(set: $npc to $npc - 1)(if:true)[(set: $miner = $miner + 1)](goto:&quot;stat rebalance&quot;)]](else:)[&lt;d id=&quot;grey&quot;&gt;**+**&lt;/d&gt;]
+} {
+(if: $miner &gt; 0)[(link:&quot;-&quot;)[(set: $npc = $npc + 1)(if:true)[(set: $miner = $miner - 1)](goto:&quot;stat rebalance&quot;)]](else:)[&lt;d id=&quot;grey&quot;&gt;**-**&lt;/d&gt;]
+} &lt;/d&gt;
+
+{
+(if: $defender &gt; 0 or $miner &gt; 0)[(link:&quot;Continue&quot;)[(goto:&quot;Encounter&quot;)]](else:)[&lt;d id=&quot;grey&quot;&gt;**Continue**&lt;/d&gt;]
+}
+
+&lt;style&gt;
+   #sign {
+      font-size:200%;
+   }
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="44" name="init2" tags="" position="1609,49">{
+&lt;!-- Initializing all the variables before beginning your adventure --&gt;
+
+(set: $brob = 0)
+(set: $brobcheck = 0)
+(set: $talkedman = 0)
+
+(set: $bank = 0)
+(set: $hp = 100)
+(set: $gold = 0)
+(set: $stm = 20)
+(set: $time = 720)
+
+(set: $main = null)
+(set: $text_bank = null)
+(set: $text_gstore = null)
+(set: $text_tavern = null)
+(set: $escape = null)
+
+(set: $npc = 6)
+(set: $defender = 0)
+(set: $miner = 0)
+(set:$gold_return = 50)
+
+(goto: &quot;Mining Town&quot;)
+}</tw-passagedata><tw-passagedata pid="45" name="lose_battle" tags="" position="2006,481">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="46" name="win_battle" tags="" position="1725,481">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="47" name="Encounter" tags="" position="1864,351">(display:&quot;profile2&quot;)
+
+You started your mining operation for a while, until you heard a weird noise in the distant background. You soon realize that you were being attack by (set:$enemy = (either: 0,1,2))(if:$enemy is 0)[***Wolves***](elseif:$enemy is 1)[***Native Indians***](else:)[***Bandits***]
+
+
+
+
+[[Continue-&gt;fight_seq]]</tw-passagedata><tw-passagedata pid="48" name="profile2" tags="" position="1484,49">Health: $hp/(print: 100 + ($defender*20)) Gold: $gold Stamina: $stm/20 Time: {
+(if:$time&gt;1439)[(set:$time=$time%1440)](if:$time&gt;779)[(print:(round:(($time/60)-($time%60)/60)-12))](else:)[(print:(round:(($time/60)-($time%60)/60)))]:(if:$time%60&gt;9)[(print:$time%60)](else:)[0(print:$time%60)](if:($time&gt;719))[(print:&quot; PM&quot;)](else:)[(print:&quot; AM&quot;)]
+
+&lt;!-- This will trigger the event when the time is 10:00pm for the player to go to sleep, **REMINDER**: Time is calculated in minutes! --&gt;
+&lt;!--(if: ($time &gt;=1320) and ($brobcheck is 0))[(goto:&quot;bank_robbery&quot;)]--&gt;
+}</tw-passagedata><tw-passagedata pid="49" name="stat rebalance" tags="" position="2055,183">{
+(set:$gold_return = 50 + (20 * $miner))
+
+(goto: (history:)&#x27;s last)
+}</tw-passagedata><tw-passagedata pid="50" name="hermit meet" tags="" position="509,707">This passage leads the players to encounter the hermit in the story as they walk towards the river to pan for gold
+
+
+
+
+
+
+
+
+[[Continue-&gt;River]]</tw-passagedata><tw-passagedata pid="51" name="minus" tags="" position="2190,184">{
+(set:$hp = $hp - 20)
+
+(goto:(history:)&#x27;s last)
+}</tw-passagedata><tw-passagedata pid="52" name="plus" tags="" position="2190,311">{
+(set:$hp = $hp + 20)
+
+(goto:(history:)&#x27;s last)
+}</tw-passagedata></tw-storydata>
