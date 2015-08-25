@@ -196,9 +196,9 @@ $text_bank
 
 (elseif: $bank &lt;= 25)[(link:&quot;Withdrawal&quot;)[(set:$mingold = $mingold + 1)(goto:&quot;alert_refresher&quot;)]]
 
-(elseif: $gold is 50)[&lt;d id=&quot;grey&quot;&gt;**Withdrawal**&lt;/d&gt; (text-color:red)[Max held Gold]]
+(elseif: $gold is $maxgold)[&lt;d id=&quot;grey&quot;&gt;**Withdrawal**&lt;/d&gt; (text-color:red)[Max held Gold]]
 
-(elseif:$bank &gt; 25)[(link:&quot;Withdrawal&quot;)[(if:(($bank - 25) + $gold) &gt; 50)[(set: $bank = $bank - (50-$gold))(move: 50 into $gold)(goto:&quot;alert_refresher&quot;)](else:)[(move:(($bank - 25) + $gold) into $gold) (set: $bank = $bank - ($bank - 25))(goto:&quot;alert_refresher&quot;)]]]
+(elseif:$bank &gt; 25)[(link:&quot;Withdrawal&quot;)[(if:(($bank - 25) + $gold) &gt; 50)[(set: $bank = $bank - ($maxgold-$gold))(move: $maxgold into $gold)(goto:&quot;alert_refresher&quot;)](else:)[(move:(($bank - 25) + $gold) into $gold) (set: $bank = $bank - ($bank - 25))(goto:&quot;alert_refresher&quot;)]]]
 
 }
 [[Leave-&gt;Main]]</tw-passagedata><tw-passagedata pid="5" name="Tavern" tags="" position="756,570">(display:&quot;Profile&quot;)
@@ -365,6 +365,7 @@ What a interesting fellow Bill thinks. The beer is soon finished and Bill walks 
 (set: $bank = 0)
 (set: $hp = 10)
 (set: $gold = 0)
+(set: $maxgold = 50)
 (set: $stm = 5)
 (set: $time = 720)
 
@@ -479,7 +480,7 @@ He finally looks at Bill dead in the face and says &quot;You never know, we may 
 
 He walks away and continues poking the various artifacts with a stick.
 
-[[Bill returns to what he is doing-&gt;The Village]] </tw-passagedata><tw-passagedata pid="28" name="Talk to Old Man" tags="" position="1303,615">He turns around and his face is expressionless. Bill knows he does not speak english and can&#x27;t remember how to say anything in their sign language but what he saw in the dream the night before. 
+[[Bill returns to what he is doing-&gt;The Village]] </tw-passagedata><tw-passagedata pid="28" name="Talk to Old Man" tags="" position="1313,608">He turns around and his face is expressionless. Bill knows he does not speak english and can&#x27;t remember how to say anything in their sign language but what he saw in the dream the night before. 
 Bill signs &quot;Life holds more promise than gold you can&#x27;t carry&quot;.
 The old man says something back in sign that Bill can&#x27;t understand, then turns around and disappears into the forest. Bill thinks if he should tell the rest of the party about the encounter but decides against it.
 
@@ -595,35 +596,70 @@ You have done well, escaped with your life and the gold. Perhaps play again with
 (set: $gun_bull = 0)
 (set: $shov_pick = 0)
 }</tw-passagedata><tw-passagedata pid="37" name="fight_seq" tags="" position="1865,481">&lt;!-- Here is the fight sequence for the cowboy Bill --&gt;
+{
+&lt;!-- Determines if you win or lose the battle --&gt;
+(if:$enemyhp &lt;= 0 and $hp&gt;0)[(goto:&quot;win_battle&quot;)]
+(elseif:$hp&lt;=0)[(goto:&quot;lost_battle&quot;)]
 (display:&quot;profile2&quot;)
-
+}
 
 {
-(link:&quot;Flee&quot;)[(if:(random:0,10) &gt; 3)[(link:&quot;Return&quot;)[(set: $escape = null)(goto:&quot;Mining Town&quot;)] You were able to escape! ](else:)[(set:$hp = $hp - 10)(if:true)[(set: $escape = &quot; You weren&#x27;t able to escape. You took 10 damage.&quot;)](goto:&quot;fight_seq&quot;)]]
-} $escape</tw-passagedata><tw-passagedata pid="38" name="save1" tags="" position="15,433">{
-&lt;!-- First save file, stores all the variables that happened in the game --&gt;
+&lt;!-- Displays the name of the enemy and their hp, which was initialized in the previous passage --&gt;
+(if:$enemy is 0)[**Wolves**](elseif:$enemy is 1)[**Native Indians**](else:)[**Bandits**]: $enemyhp hp
+}
 
-(set: $brob = 0)
-(set: $brobcheck = 0)
-(set: $talkedman = 0)
+{
+Attack: $att
+}
 
-(set: $bank = 0)
-(set: $hp = 10)
-(set: $gold = 0)
-(set: $stm = 5)
-(set: $time = 720)
+What will you do?
 
-(set: $main = null)
-(set: $text_bank = null)
-(set: $text_gstore = null)
-(set: $text_tavern = null)
+{
+(link:&quot;Attack&quot;)[(set:$text_att = null)(if:true)[(set:$enemyhp = $enemyhp - $att)](if:true)[(set:$hp = $hp - $edamage)](if:$gun is 1 and $bullets &gt; 0)[(set: $bullets = $bullets - 1)(if:$bullets is 0)[(set:$text_att = &quot;You ran out of bullets&quot;)]](goto:&quot;fight_seq&quot;)]
+} $text_att
+{
+(link:&quot;Flee&quot;)[(if:(random:0,10) &gt; 5)[
 
-(goto: &quot;Intro&quot;)
-}</tw-passagedata><tw-passagedata pid="39" name="save2" tags="" position="162,434">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="40" name="save3" tags="" position="315,434">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="41" name="dead" tags="" position="2055,56">You died a horrible death....
+(link:&quot;Return&quot;)[(set: $escape = null)(goto:&quot;flee battle&quot;)] You were able to escape! ]
+
+(else:)[(set:$hp = $hp - $edamage)
+(if:true)[(set: $escape = &quot; You weren&#x27;t able to escape. You took $edamage damage.&quot;)](goto:&quot;fight_seq&quot;)]]
+} $escape</tw-passagedata><tw-passagedata pid="38" name="save1" tags="" position="2054,92">{
+&lt;!-- Initializing all the variables before beginning your adventure --&gt;
+(set: $savecheck = 1)
+
+(set: $brob1 = $brob)
+(set: $brobcheck1 = $brobcheck)
+(set: $talkedman1 = $talkedman)
+
+(set: $bank1 = $bank)
+(set: $hp1 = $hp)
+(set: $gold1 = $gold)
+(set: $maxgold1 = $maxgold)
+(set: $stm1 = $stm)
+(set: $time1 = $time)
+
+(set: $main1 = $main)
+(set: $text_bank1 = $text_bank)
+(set: $text_gstore1 = $text_gstore)
+(set: $text_tavern1 = $text_tavern)
+(set: $escape1 = $escape)
+
+(set: $npc1 = $npc)
+(set: $defender1 = $defender)
+(set: $miner1 = $miner)
+(set: $gold_return1 = $gold_return)
+
+(set: $knife1 = $knife)
+(set: $gun1 = $gun)
+(set: $bullets1 = $bullets)
+
+(goto: &quot;Mining Town&quot;)
+}</tw-passagedata><tw-passagedata pid="39" name="lost_battle" tags="" position="2239,42">You saw as you comrades die before you eyes, the enemy closed in on your location. You were cornered like a rat, desperately trying to escape. Before you know it, a bullet struck you on the forehead. Everything turned dark.
 
 
 
-(link:&quot;Restart Game?&quot;)[(goto:&quot;init&quot;)]</tw-passagedata><tw-passagedata pid="42" name="Mining Town" tags="" position="1863,91">(display:&quot;profile2&quot;)
+(link:&quot;Continue&quot;)[(goto:&quot;dead&quot;)]</tw-passagedata><tw-passagedata pid="40" name="mining town" tags="" position="1863,91">(display:&quot;profile2&quot;)
 
 Here is the mining town we will visit during your journey
 
@@ -631,7 +667,9 @@ Here is the mining town we will visit during your journey
 
 
 
-[[Go to Camp-&gt;mining camp]]</tw-passagedata><tw-passagedata pid="43" name="mining camp" tags="" position="1863,226">(display:&quot;profile2&quot;)
+[[Save-&gt;save1]]
+[[Go to Camp-&gt;mining camp]]
+[[generalstore_t]]</tw-passagedata><tw-passagedata pid="41" name="mining camp" tags="" position="1863,226">(display:&quot;profile2&quot;)
 
 Set the number of NPCs to either mine or defend your camp
 
@@ -653,6 +691,7 @@ Number of miners: $miner &lt;d id=&quot;sign&quot;&gt;{
 (if: $miner &gt; 0)[(link:&quot;-&quot;)[(set: $npc = $npc + 1)(if:true)[(set: $miner = $miner - 1)](goto:&quot;stat rebalance&quot;)]](else:)[&lt;d id=&quot;grey&quot;&gt;**-**&lt;/d&gt;]
 } &lt;/d&gt;
 
+[[Return-&gt;mining town]]
 {
 (if: $defender &gt; 0 or $miner &gt; 0)[(link:&quot;Continue&quot;)[(goto:&quot;Encounter&quot;)]](else:)[&lt;d id=&quot;grey&quot;&gt;**Continue**&lt;/d&gt;]
 }
@@ -661,7 +700,7 @@ Number of miners: $miner &lt;d id=&quot;sign&quot;&gt;{
    #sign {
       font-size:200%;
    }
-&lt;/style&gt;</tw-passagedata><tw-passagedata pid="44" name="init2" tags="" position="1609,49">{
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="42" name="init2" tags="" position="1738.0001,20">{
 &lt;!-- Initializing all the variables before beginning your adventure --&gt;
 
 (set: $brob = 0)
@@ -669,8 +708,9 @@ Number of miners: $miner &lt;d id=&quot;sign&quot;&gt;{
 (set: $talkedman = 0)
 
 (set: $bank = 0)
-(set: $hp = 100)
-(set: $gold = 0)
+(set: $hp = 60)
+(set: $gold = 40)
+(set: $maxgold = 50)
 (set: $stm = 20)
 (set: $time = 720)
 
@@ -679,30 +719,68 @@ Number of miners: $miner &lt;d id=&quot;sign&quot;&gt;{
 (set: $text_gstore = null)
 (set: $text_tavern = null)
 (set: $escape = null)
+(set: $text_att = null)
 
 (set: $npc = 6)
 (set: $defender = 0)
 (set: $miner = 0)
-(set:$gold_return = 50)
+(set: $gold_return = 50)
 
-(goto: &quot;Mining Town&quot;)
-}</tw-passagedata><tw-passagedata pid="45" name="lose_battle" tags="" position="2006,481">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="46" name="win_battle" tags="" position="1725,481">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="47" name="Encounter" tags="" position="1864,351">(display:&quot;profile2&quot;)
+(set: $knife=0)
+(set: $gun=0)
+(set: $bullet=0)
 
-You started your mining operation for a while, until you heard a weird noise in the distant background. You soon realize that you were being attack by (set:$enemy = (either: 0,1,2))(if:$enemy is 0)[***Wolves***](elseif:$enemy is 1)[***Native Indians***](else:)[***Bandits***]
+(goto: &quot;mining town&quot;)
+}</tw-passagedata><tw-passagedata pid="43" name="dead" tags="" position="1736,482">You are dead. What would you like to do?
 
 
 
 
-[[Continue-&gt;fight_seq]]</tw-passagedata><tw-passagedata pid="48" name="profile2" tags="" position="1484,49">Health: $hp/(print: 100 + ($defender*20)) Gold: $gold Stamina: $stm/20 Time: {
+
+[[Start over?-&gt;init2]]
+{
+(if:$savecheck is 1)[(link:&quot;Load Save&quot;)[(goto:&quot;load1&quot;)]](else:)[&lt;d id=&quot;grey&quot;&gt;**Load Save**&lt;d&gt;]
+}</tw-passagedata><tw-passagedata pid="44" name="win_battle" tags="" position="2053,480">You won that battle!
+
+
+
+
+
+
+
+[[mining town]]
+
+
+{
+&lt;!-- Resets all variables just in case --&gt;
+
+(set: $edamage = null)
+(set: $text_att = null)
+(set: $escape = null)
+(set: $enemyhp = null)
+(set: $gold = $gold + $gold_return)
+}</tw-passagedata><tw-passagedata pid="45" name="Encounter" tags="" position="1864,351">(display:&quot;profile2&quot;)
+
+You started your mining operation for a while, until you heard a weird noise in the distant background. You soon realize that you were being attack by (set:$enemycount = (random: 1,3)) $enemycount (set:$enemy = (either: 0,1,2))(if:$enemy is 0)[***Wolves***](elseif:$enemy is 1)[***Native Indians***](else:)[***Bandits***]
+{
+(if:$enemy is 0)[(set:$enemyhp = (10*$enemycount))(if:true)[(set:$edamage = (2*$enemycount))]](elseif:$enemy is 1)[(set:$enemyhp = (30*$enemycount))(if:true)[(set:$edamage = (5*$enemycount))]](else:)[(set:$enemyhp = (20*$enemycount))(if:true)[(set:$edamage = (8*$enemycount))]]
+}
+
+
+
+[[Continue-&gt;fight_seq]]</tw-passagedata><tw-passagedata pid="46" name="profile2" tags="" position="1608,20">Health: $hp/(print: 60 + ($defender*20)) Gold: $gold Stamina: $stm/20 Time: {
 (if:$time&gt;1439)[(set:$time=$time%1440)](if:$time&gt;779)[(print:(round:(($time/60)-($time%60)/60)-12))](else:)[(print:(round:(($time/60)-($time%60)/60)))]:(if:$time%60&gt;9)[(print:$time%60)](else:)[0(print:$time%60)](if:($time&gt;719))[(print:&quot; PM&quot;)](else:)[(print:&quot; AM&quot;)]
 
 &lt;!-- This will trigger the event when the time is 10:00pm for the player to go to sleep, **REMINDER**: Time is calculated in minutes! --&gt;
 &lt;!--(if: ($time &gt;=1320) and ($brobcheck is 0))[(goto:&quot;bank_robbery&quot;)]--&gt;
-}</tw-passagedata><tw-passagedata pid="49" name="stat rebalance" tags="" position="2055,183">{
+
+
+(if: $knife is 1 and $gun is 0)[(set: $att = 10)](elseif:$knife is 1 and $gun is 1 and $bullets &gt; 0)[(set: $att = 20)](elseif:$knife is 1 and $gun is 1 and $bullets is 0)[(set: $att = 10)](elseif:$knife is 0 and $gun is 1 and $bullets &gt; 0)[(set: $att = 20)](elseif:$knife is 0 and $gun is 1 and $bullets is 0)[(set: $att = 5)](else:)[(set: $att = 5)]
+}</tw-passagedata><tw-passagedata pid="47" name="stat rebalance" tags="" position="2237,419">{
 (set:$gold_return = 50 + (20 * $miner))
 
 (goto: (history:)&#x27;s last)
-}</tw-passagedata><tw-passagedata pid="50" name="hermit meet" tags="" position="509,707">This passage leads the players to encounter the hermit in the story as they walk towards the river to pan for gold
+}</tw-passagedata><tw-passagedata pid="48" name="hermit meet" tags="" position="509,707">This passage leads the players to encounter the hermit in the story as they walk towards the river to pan for gold
 
 
 
@@ -711,12 +789,74 @@ You started your mining operation for a while, until you heard a weird noise in 
 
 
 
-[[Continue-&gt;River]]</tw-passagedata><tw-passagedata pid="51" name="minus" tags="" position="2190,184">{
+[[Continue-&gt;River]]</tw-passagedata><tw-passagedata pid="49" name="minus" tags="" position="2239,169">{
 (set:$hp = $hp - 20)
 
 (goto:(history:)&#x27;s last)
-}</tw-passagedata><tw-passagedata pid="52" name="plus" tags="" position="2190,311">{
+}</tw-passagedata><tw-passagedata pid="50" name="plus" tags="" position="2240,294">{
 (set:$hp = $hp + 20)
 
 (goto:(history:)&#x27;s last)
+}</tw-passagedata><tw-passagedata pid="51" name="load1" tags="" position="1606,483">{
+&lt;!-- Initializing all the variables before beginning your adventure --&gt;
+
+(set: $brob = $brob1)
+(set: $brobcheck = $brobcheck1)
+(set: $talkedman = $talkedman1)
+
+(set: $bank = $bank1)
+(set: $hp = $hp1)
+(set: $gold = $gold1)
+(set: $stm = $stm1)
+(set: $time = $time1)
+
+(set: $main = $main1)
+(set: $text_bank = $text_bank1)
+(set: $text_gstore = $text_gstore1)
+(set: $text_tavern = $text_tavern1)
+(set: $escape = null)
+(set: $text_att = null)
+
+(set: $npc = $npc1)
+(set: $defender = $defender1)
+(set: $miner = $miner1)
+(set: $gold_return = $gold_return1)
+
+(goto: &quot;Mining Town&quot;)
+}</tw-passagedata><tw-passagedata pid="52" name="generalstore_t" tags="" position="2054,240">(display:&quot;profile2&quot;)
+
+Debugging if my statements work or not
+
+
+Attack: $att
+
+{
+(if:$knife is 1)[&lt;d id=&quot;grey&quot;&gt;**Knife** &lt;d id=&quot;red&quot;&gt;-40 gold&lt;/d&gt; *Obtained*]
+(elseif:$gold&gt;=40)[(link:&quot;Knife&quot;)[(set:$gold=$gold-40) (if:true)[(set:$knife = 1)](goto:&quot;alert_refresher&quot;)] &lt;d id=&quot;red&quot;&gt;-40 gold&lt;/d&gt;]
+(else:)[&lt;d id=&quot;grey&quot;&gt;**Knife** &lt;d id=&quot;red&quot;&gt;-40 gold&lt;/d&gt; *Not enough Gold*]
+}
+{
+(if:$gun is 1)[&lt;d id=&quot;grey&quot;&gt;**Knife** &lt;d id=&quot;red&quot;&gt;-100 gold&lt;/d&gt; *Obtained*]
+(elseif:$gold&gt;=100)[(link:&quot;Gun&quot;)[(set:$gold=$gold-100) (if:true)[(set:$gun = 1)](goto:&quot;alert_refresher&quot;)] &lt;d id=&quot;red&quot;&gt;-100 gold&lt;/d&gt;]
+(else:)[&lt;d id=&quot;grey&quot;&gt;**Gun** &lt;d id=&quot;red&quot;&gt;-100 gold&lt;/d&gt;  *Not Enough Gold*]
+}
+{
+(if:$gold&gt;=10)[(link:&quot;Bullets&quot;)[(set:$gold=$gold-10) (if:true)[(set:$bullets = $bullets + 5)](goto:&quot;alert_refresher&quot;)] &lt;d id=&quot;red&quot;&gt;-10 gold&lt;/d&gt;]
+(else:)[&lt;d id=&quot;grey&quot;&gt;**Bullets** &lt;d id=&quot;red&quot;&gt;-30 gold&lt;/d&gt;  *Not Enough Gold*]
+}
+[[Return-&gt;mining town]]
+
+
+</tw-passagedata><tw-passagedata pid="53" name="items" tags="" position="275,394">&lt;!-- Used to keep track of the items we will be using in this game, Combine this content to the init passages when starting the game. (init2 may also need it too, or just combine everything) --&gt;</tw-passagedata><tw-passagedata pid="54" name="flee battle" tags="" position="2238,548">You were able to flee the battle, but you had to stop your mining operation earlier than expect
+
+Gold Earned: (print:($gold_return - (15*$enemycount)))
+
+
+
+
+
+[[Mining Town-&gt;mining town]]
+
+{
+(set: $gold = $gold + ($gold_return - (15*$enemycount)))
 }</tw-passagedata></tw-storydata>
